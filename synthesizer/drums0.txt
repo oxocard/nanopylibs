@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kick drum2
+Kick drum1
+Side Stick
+Snare Drum 1
+Hand Clap
+Snare Drum 2
+Low Floor Tom
+Closed Hi Hat [EXC1]
+High Floor Tom
+Pedal Hi-Hat [EXC1]
+Low Tom
+Open Hi-Hat [EXC1]
+Low-Mid Tom
+Hi Mid Tom
+Crash Cymbal 1
+High Tom
+Ride Cymbal 1
+Chinese Cymbal
+Ride Bell
+Tambourine
+Splash Cymbal
+Cowbell
+Crash Cymbal 2
+Vibraslap
+Ride Cymbal 2
+Hi Bongo
+Low Bongo
+Mute Hi Conga
+Open Hi Conga
+Low Conga
+High Timbale
+Low Timbale
+High Agogo
+Low Agogo
+Cabasa
+Maracas
+Short Whistle[EXC2]
+Long Whistle[EXC2]
+Short Guiro [EXC3]
+Long Guiro [EXC3]
+Claves
+Hi Wood Block
+Low Wood Block
+Mute Cuica [EXC4]
+Open Cuica [EXC4]
+Mute Triangle [EXC5.
+Open Triangle[EXC5]

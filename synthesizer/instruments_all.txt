@@ -1,0 +1,256 @@
+﻿Ac. Guitar (nylon);25;0
+Ac. Guitar (steel);26;0
+Accordion (french);22;0
+Accordion Fr.;16;1
+Acoustic Bass;33;0
+Acoustic Bs.;65;1
+Agogo;114;0
+Alto Sax;66;0
+Alto Sax;80;1
+Applause;127;0
+Atmosphere;38;1
+Bag pipe;110;0
+Bag Pipe;40;1
+Banjo;106;0
+Baritone Sax;68;0
+Baritone Sax;82;1
+Bassoon;71;0
+Bassoon;87;1
+Bird;125;1
+Bird Tweet;124;0
+Blown Bottle;77;0
+Bottle Blow;111;1
+Bowed Glass;36;1
+Bowed Glass;127;1
+Brass;96;1
+Brass 2;97;1
+Brass Section;62;0
+Breath Noise;122;0
+Castanets;121;1
+Celesta;9;0
+Celesta;23;1
+Celesta;24;1
+Cello;43;0
+Cello;55;1
+Cello;56;1
+Charang;46;1
+Choir Aahs;53;0
+Choir Aahs;35;1
+Chorus Gt.;62;1
+Church Org.;14;1
+Church Org.;15;1
+Church Org. 2;13;1
+Church Organ;20;0
+Clarinet;72;0
+Clarinet;83;1
+Clarinet;84;1
+Clav.;20;1
+Clav.;21;1
+Clav.;22;1
+Clavi;8;0
+Contrabass;44;0
+Contrabass;57;1
+Coupled Hps.;18;1
+Coupled Hps.;19;1
+Crystal;39;1
+Detuned EP 1;4;1
+Detuned EP2;7;1
+Detuned Or. 1;12;1
+Distortion Guitar;31;0
+Drawbar Organ;17;0
+E.Piano1;5;1
+E.Piano2;6;1
+El. Guitar (clean);28;0
+El. Guitar (jazz);27;0
+El. Guitar (muted);29;0
+El. Piano 1;5;0
+El. Piano 2;6;0
+English Horn;70;0
+English Horn;86;1
+Fantasia;33;1
+Fiddle;111;0
+Finger Bass;34;0
+Fingered Bs.;66;1
+Flute;74;0
+Flute;73;1
+Flute;74;1
+French Horn;61;0
+French Horn;93;1
+French Horn;94;1
+Fretless Bass;36;0
+Fretless Bs.;68;1
+Fretless Bs.;71;1
+Fretless Bs.;72;1
+Funk Gt.;63;1
+FX 1 (rain);97;0
+FX 2 (soundtrack);98;0
+FX 3 (crystal);99;0
+FX 5 (brightness);101;0
+FX 6 (goblins);102;0
+FX 7 (echoes);103;0
+FX 8 (sci-fi);104;0
+FX4 (atmosphere);100;0
+Glockenspiel;10;0
+Glockenspiel;102;1
+Gt. Fret Noise;121;0
+Guitar harmonics;32;0
+Gunshot;128;0
+Harmonica;23;0
+Harmonica;88;1
+Harp;58;1
+Harp;59;1
+Harpsichord;7;0
+Harpsichord;17;1
+Helicopter;126;0
+Helicopter;126;1
+Honky-Tonk;8;1
+Honky-tonk Piano;4;0
+Ice Rain;42;1
+Ice Rain;128;1
+Kalimba;109;0
+Kalimba;100;1
+Koto;108;0
+Koto;106;1
+Lead 1 (square);81;0
+Lead 2 (sawtooth);82;0
+Lead 3 (calliope);83;0
+Lead 4 (chiff);84;0
+Lead 5 (charang);85;0
+Lead 6 (voice);86;0
+Lead 7 (fifths);87;0
+Lead8 (bass+lead);88;0
+Marimba;13;0
+Marimba;105;1
+Melo Tom;114;1
+Melo Tom;115;1
+Melodic Tom;118;0
+Music Box;11;0
+Muted Trumpet;60;0
+Muted Trumpet;90;1
+Nylon-str. Gt;60;1
+Oboe;69;0
+Oboe;43;1
+Oboe;85;1
+Ocarina;80;0
+Orchestra Hit;56;0
+Orchestra Hit;123;1
+Orchestral Harp;47;0
+Organ 1;9;1
+Organ 2;10;1
+Organ 3;11;1
+Overdriven Guitar;30;0
+Pad 1 (fantasia);89;0
+Pad 2 (warm);90;0
+Pad 3 (polysynth);91;0
+Pad 4 (choir);92;0
+Pad 5 (bowed);93;0
+Pad 6 (metallic);94;0
+Pad 7 (halo);95;0
+Pad 8 (sweep);96;0
+Pan Flute;76;0
+Pan Flute;44;1
+Pan Flute;78;1
+Pan Flute;112;1
+Percussive Organ;18;0
+Piano 1;1;1
+Piano 1 (Grand);1;0
+Piano 2;2;1
+Piano 2 (Bright);2;0
+Piano 3;3;1
+Piano 3 (El. Grd);3;0
+Piccolo;73;0
+Piccolo;75;1
+Piccolo;76;1
+Picked Bass;35;0
+Picked Bs.;67;1
+Pizzicato Str.;52;1
+Pizzicato Strings;46;0
+Recorder;75;0
+Recorder;77;1
+Reed Organ;21;0
+Reverse Cym.;120;1
+Reverse Cymbal;120;0
+Rock Organ;19;0
+Santur;16;0
+Saw Wave;45;1
+Seashore;123;0
+Shakuhachi;78;0
+Shakuhachi;108;1
+Shamisen;107;0
+Shanai;112;0
+Sitar;105;0
+Sitar;64;1
+Slap Bass 1;37;0
+Slap Bass 2;38;0
+Slap Bs. 1;69;1
+Slap Bs. 2;70;1
+Slow Strings;51;1
+Soprano Sax;65;0
+Soprano Sax;79;1
+Soundtrack;37;1
+Square Wave;48;1
+Steel Drums;115;0
+Steel-Str. Gt;61;1
+String Ensemble 1;49;0
+String Ensemble 2;50;0
+Strings;49;1
+Syn Calliope;34;1
+Synth Bass 1;39;0
+Synth Bass 2;40;0
+Synth Bass1;29;1
+Synth Bass2;30;1
+Synth Bass3;31;1
+Synth Bass4;32;1
+Synth Brass 1;63;0
+Synth Brass 2;64;0
+Synth Brass1;25;1
+Synth Brass2;26;1
+Synth Brass3;27;1
+Synth Brass4;28;1
+Synth Drum;119;0
+Synth Drum;116;1
+Synth Drum;117;1
+Synth Strings 1;51;0
+Synth Strings 2;52;0
+Synth Voice;55;0
+Taiko;118;1
+Taiko;119;1
+Taiko Drum;117;0
+Taisho Koto;107;1
+Tango Accordion;24;0
+Teleph. Ring;125;0
+Telephone;124;1
+Tenor Sax;67;0
+Tenor Sax;81;1
+Timpani;48;0
+Timpani;113;1
+Tinkle Bell;113;0
+Tinkle Bell;41;1
+Tinkle Bell;101;1
+Tinkle Bell;122;1
+Tremolo Str.;50;1
+Tremolo Strings;45;0
+Trombone;58;0
+Trombone;91;1
+Trombone;92;1
+Trumped;89;1
+Trumpet;57;0
+Tuba;59;0
+Tuba;95;1
+Tubular Bells;15;0
+Tubular Bells;47;1
+Tubular-Bell;103;1
+Vibraphone;12;0
+Vibraphone;98;1
+Vibraphone;99;1
+Viola;42;0
+Viola;54;1
+Violin;41;0
+Violin;53;1
+Voice Oohs;54;0
+Whistle;79;0
+Whistle;109;1
+Whistle;110;1
+Woodblock;116;0
+Xylophone;14;0
+Xylophone;104;1

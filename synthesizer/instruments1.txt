@@ -1,0 +1,128 @@
+Piano 1
+Piano 2
+Piano 3
+Detuned EP 1
+E.Piano1
+E.Piano2
+Detuned EP2
+Honky-Tonk
+Organ 1
+Organ 2
+Organ 3
+Detuned Or. 1
+Church Org. 2
+Church Org.
+Church Org.
+Accordion Fr.
+Harpsichord
+Coupled Hps.
+Coupled Hps.
+Clav.
+Clav.
+Clav.
+Celesta
+Celesta
+Synth Brass1
+Synth Brass2
+Synth Brass3
+Synth Brass4
+Synth Bass1
+Synth Bass2
+Synth Bass3
+Synth Bass4
+Fantasia
+Syn Calliope
+Choir Aahs
+Bowed Glass
+Soundtrack
+Atmosphere
+Crystal
+Bag Pipe
+Tinkle Bell
+Ice Rain
+Oboe
+Pan Flute
+Saw Wave
+Charang
+Tubular Bells
+Square Wave
+Strings
+Tremolo Str.
+Slow Strings
+Pizzicato Str.
+Violin
+Viola
+Cello
+Cello
+Contrabass
+Harp
+Harp
+Nylon-str. Gt
+Steel-Str. Gt
+Chorus Gt.
+Funk Gt.
+Sitar
+Acoustic Bs.
+Fingered Bs.
+Picked Bs.
+Fretless Bs.
+Slap Bs. 1
+Slap Bs. 2
+Fretless Bs.
+Fretless Bs.
+Flute
+Flute
+Piccolo
+Piccolo
+Recorder
+Pan Flute
+Soprano Sax
+Alto Sax
+Tenor Sax
+Baritone Sax
+Clarinet
+Clarinet
+Oboe
+English Horn
+Bassoon
+Harmonica
+Trumped
+Muted Trumpet
+Trombone
+Trombone
+French Horn
+French Horn
+Tuba
+Brass
+Brass 2
+Vibraphone
+Vibraphone
+Kalimba
+Tinkle Bell
+Glockenspiel
+Tubular-Bell
+Xylophone
+Marimba
+Koto
+Taisho Koto
+Shakuhachi
+Whistle
+Whistle
+Bottle Blow
+Pan Flute
+Timpani
+Melo Tom
+Melo Tom
+Synth Drum
+Synth Drum
+Taiko
+Taiko
+Reverse Cym.
+Castanets
+Tinkle Bell
+Orchestra Hit
+Telephone
+Bird
+Helicopter
+Bowed Glass
+Ice Rain

@@ -1,0 +1,288 @@
+const SYNTHESIZER_VERSION     = 9
+const MIDI_CMD_CONTROL_CHANGE = 0xb0
+const MIDI_CMD_PROGRAM_CHANGE = 0xc0
+const DEFAULT_PBM             = 120
+
+_global_channel = 0
+_global_instrumentSet = 0
+_global_drumSet = 0
+
+sfolder = "synthesizer/"
+
+def readSoundName(filename:byte[], id)->byte[]:
+    buf:byte[256]
+    if not fileExists(filename) return "NO DATA"
+    open(C_READ, filename)
+    i=0
+    while ((not eof()) and (i < (id+1))):
+        buf = readLine()
+        i++
+    close()
+    buf2:byte[25]  # limit to 24 characters
+    i=0
+    while i < 24:
+        buf2[i] = buf[i]
+        i++
+    return buf2
+
+def getDrumName(id:byte)->byte[]:
+    return readSoundName(sfolder +"drums" + _global_drumSet + ".txt",id-1)
+
+def getInstrumentName(id:byte)->byte[]:
+    return readSoundName(sfolder +"instruments" + _global_instrumentSet + ".txt",id-1)
+
+
+# sets the master volume (0-127)
+def masterVolume(level:byte):
+    //F0H 7FH 7FH 04H 01H 00H ll F7H
+    command:byte[8]
+    command[0] = 0xf0
+    command[1] = 0x7f
+    command[2] = 0x7f
+    command[3] = 0x04
+    command[4] = 0x01
+    command[5] = 0x00
+    command[6] = (level & 0x7f)
+    command[7] = 0xf7
+    writeUART(8, command)
+
+def resetMidi():
+    command:byte[1]
+    command[0] = 0xff
+    writeUART(1,command)
+
+def initMidi():
+    initUART(C_PIN_01, C_PIN_02, 31250) # TX, RX, BAUDRATE
+    _midiInitialized = true
+    _global_instrumentSet = 0
+    _global_channel = 0
+
+def noteOn(note_:byte,velocity:byte):
+    command:byte[3]
+    command[0] = 0x90 | (_global_channel  & 0x0f)
+    command[1] = note_
+    command[2] = velocity
+    writeUART(3,command)
+
+def noteOff(pitch:byte):
+    command:byte[3]
+    command[0] = 0x80 | (_global_channel  & 0x0f)
+    command[1] = pitch
+    command[2] = 0
+    writeUART(3,command)
+
+def drum(dr:byte, velocity:byte):
+    if _global_channel != 9: _global_channel = 9
+    noteOn(dr,velocity)
+
+def noDrum(dr:byte):
+    if _global_channel != 9: _global_channel = 9
+    noteOff(dr)
+
+def allNotesOff():
+    command:byte[3]
+    command[0] = 0xb0 | (_global_channel  & 0x0f)
+    command[1] = 0x7b
+    command[2] = 0
+    writeUART(3,command)
+    # command:byte[3]
+    command[0] = 0xb0 | (_global_channel  & 0x0f)
+    command[1] = 0x78
+    command[2] = 0
+    writeUART(3,command)
+
+def instrumentSet(progset:byte):
+    # 0 - Standard Mini sounds
+    # 1 - alternative sounds
+    
+    _global_instrumentSet = progset
+    
+def instrument(instrument:byte):
+    command:byte[3]
+    command[0] = (MIDI_CMD_CONTROL_CHANGE | (_global_channel  & 0x0f))
+    command[1] = 0x00
+
+    if _global_channel  == 9:
+        command[2] = 0x7f  # bank
+    else:
+        command[2] = (_global_instrumentSet * 127)
+    writeUART(3,command)
+
+    command[0] = MIDI_CMD_PROGRAM_CHANGE | (_global_channel  & 0x0f)
+    command[1] = instrument & 0x7f
+    writeUART(2,command)
+
+def volume(level:byte): #0 .. 127
+    command:byte[3]
+    command[0] = (0xb0 | (_global_channel  & 0x0f))
+    command[1] = 0x07
+    command[2] = level & 0x7f
+    writeUART(3,command)
+
+def drums():
+    _global_channel  = 9
+
+def channel(ch:byte):
+    _global_channel = ch
+
+def drumSet(progset:byte):  #0 = prog 1, 1 = prog 17, 2 = prog 41, 3 = prog 49, 4 = pro 127
+    progsets = [1,17,41,49,127]
+    _global_drumSet = progset
+
+    command:byte[3]
+    command[0] = (MIDI_CMD_CONTROL_CHANGE | (_global_channel  & 0x0f))
+    command[1] = 0x00
+    command[2] = 0x7f  # bank
+    writeUART(3,command)
+
+    command[0] = MIDI_CMD_PROGRAM_CHANGE | (_global_channel  & 0x0f)
+    command[1] = progsets[progset % 5] & 0x7f
+    writeUART(2,command)
+
+def reverb(program:byte, level:byte):
+    #// Program
+    #// 0: Room1   1: Room2    2: Room3
+    #// 3: Hall1   4: Hall2    5: Plate
+    #// 6: Delay   7: Pan delay
+    # level: 0 .. 127
+    command:byte[3]
+    command[0] = 0xb0 | (_global_channel  & 0x0f)
+    command[1] = 0x50
+    command[2] = program & 0x07
+    writeUART(3,command)
+    command[1] = 0x5b
+    command[2] = level & 0x7f
+    writeUART(3,command)
+
+def chorus(program:byte, level:byte):
+    #// Program
+    #// 0: chorus1   1: chorus2    2: chorus3
+    #// 3: chorus4   4: FB Chorus    5: Flanger
+    #// 6: Delay   7: FB delay
+    # level: 0 .. 127
+    command:byte[3]
+    command[0] = 0xb0 | (_global_channel  & 0x0f)
+    command[1] = 0x51
+    command[2] = program & 0x07
+    writeUART(3,command)
+    command[1] = 0x5d
+    command[2] = level & 0x7f
+    writeUART(3,command)
+
+def sxrevtime(t:byte):
+    REVTIME=[0xf0,0x41, 0x00, 0x42, 0x12, 0x40, 0x01, 0x34, 0xff, 0xf7]
+    REVTIME[8]= (t & 0x7f)
+    writeUART(sizeof(REVTIME),REVTIME)
+
+def sxrevfb(t:byte):
+    REVTIME=[0xf0,0x41, 0x00, 0x42, 0x12, 0x40, 0x01, 0x35, 0xff, 0xf7]
+    REVTIME[8]= (t & 0x7f)
+    writeUART(sizeof(REVTIME),REVTIME)
+
+
+def pan(value:int): #0 .. 64 .. 127
+    command:byte[3]
+    command[0] = (0xb0 | (_global_channel  & 0x0f))
+    command[1] = 0x0A
+    command[2] = value & 0x7f
+    writeUART(3,command)
+
+SYMBOLS_1:byte[13] = "CCDDEFFGGAAB"
+SYMBOLS_2:byte[13] = "010100101010"
+
+def numToNote(num:byte)->byte[10]:
+    octave:int = num / 12
+    octave-- 
+    tone_ = num % 12
+    buf:byte[10]
+    buf[0] = SYMBOLS_1[tone_]
+    if SYMBOLS_2[tone_] == '1':
+        buf = buf +  "#"
+    buf = buf + octave
+    return buf
+
+def noteToNum(noteText:byte[10])->byte:
+    bufIndex = 0
+    nextSym = noteText[bufIndex]
+    note_=0
+    # note detection
+    foundNote=false
+    for s in SYMBOLS_1:
+        if nextSym == s or nextSym == s+32:
+            foundNote=true
+            break
+        note_++
+    if not foundNote: return 0
+    bufIndex++
+    nextSym = noteText[bufIndex]
+    # #-detection
+    if nextSym == '#': 
+        note_++
+        bufIndex++
+    nextSym = noteText[bufIndex]
+    # -1 detection
+    if nextSym == '-':
+        bufIndex++
+        if noteText[bufIndex] == '1':
+            return note_
+        else:
+            return 0
+
+    if nextSym >= '0' and nextSym <= '9':
+        note_ = note_ + (12*(1+(nextSym-48)))
+    else:
+        return 0
+    return note_
+
+class Metronom:
+    last_beat_millis:long                          
+    bpm:long                                       
+    beat_ms:long      
+    beat_counter:long
+    songLength:long              
+
+    def init(bpm_:long, songLength_:long):
+        bpm = bpm_
+        songLength = songLength_
+        beat_counter = 1
+        beat_ms= (60.0*1000) / bpm_         
+        last_beat_millis = millis()
+
+    def beat()->bool:
+        ms = millis() -last_beat_millis 
+        if ms <= beat_ms
+            return false 
+        if beat_counter < songLength:
+            beat_counter++
+        else:
+            beat_counter = 1
+        last_beat_millis = millis()
+        return true
+    def getBeat()->long:
+        return beat_counter
+
+    def setBeatInterval(divider:byte):
+        setInterval(beat_ms/divider)
+
+metronom:Metronom
+
+_bpm = DEFAULT_PBM
+_beat_ms:float= (60.0*1000) / _bpm
+
+def changeBPM(bpm:int):
+    _bpm = bpm
+    _beat_ms= (60.0*1000) / _bpm
+
+def beatDelay(beats:float):
+    delay(_beat_ms*beats)
+
+def getBeatMillis()->float:
+    return _beat_ms
+
+def setBeatInterval(divider):
+    setInterval(_beat_ms/divider)
+
+
+initMidi()
+resetMidi()
+
