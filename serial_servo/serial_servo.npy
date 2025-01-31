@@ -1,0 +1,142 @@
+const _SCS_MODE_NONE        = 0
+const _SCS_MODE_SERVO       = 1
+const _SCS_MODE_MOTOR       = 2
+
+const _SCS_READ_DATA        = 0x02
+const _SCS_WRITE_DATA       = 0x03
+
+const SCS_BROADCAST_ID   = 0xFE
+
+class SerialServoBus:
+    _servoModes:byte[255]
+
+    def _flushRxBuffer():
+        len = getUARTDataLength()
+        if(len) readUART(len)
+
+    def _calcChecksum(msg:byte[], paramLen:byte)->byte:
+        cs:byte = msg[2] + msg[3] + msg[4]
+        for n in paramLen:
+            cs += msg[n + 5]
+        cs = ~cs 
+        return cs
+
+    def _writeData(id:byte, data:byte[]):
+        dataLen = sizeof(data)
+        msgLen = dataLen + 6
+        message:byte[255]
+        message[0] = 0xFF
+        message[1] = 0xFF
+        message[2] = id
+        message[3] = dataLen + 2
+        message[4] = _SCS_WRITE_DATA
+        for i in sizeof(data):
+            message[5 + i] = data[i]
+        message[msgLen - 1] = _calcChecksum(message, dataLen)
+        writeUART(msgLen, message)
+
+    def _sendReadData(id:byte, addr:byte, len:byte):
+        message:byte[8]
+        message[0] = 0xFF
+        message[1] = 0xFF
+        message[2] = id
+        message[3] = 0x04
+        message[4] = _SCS_READ_DATA
+        message[5] = addr
+        message[6] = len
+        message[7] = _calcChecksum(message, 2)
+        _flushRxBuffer()
+        writeUART(8, message)
+
+    def _setLock(id:byte):
+        lockData = [0x30, 0x01]
+        _writeData(id, lockData)
+
+    def _releaseLock(id:byte):
+        lockData = [0x30, 0x00]
+        _writeData(id, lockData)
+
+    def init(txPin:byte, rxPin:byte, baudRate:long):
+        for i in 253:
+            _servoModes[i] = _SCS_MODE_NONE
+        initUART(txPin, rxPin, baudRate)
+
+    def setPosition(id:byte, pos:int, speed:int):
+        if(id == SCS_BROADCAST_ID || _servoModes[id] != _SCS_MODE_SERVO):
+            motorMode = [0x09, 0x00, 0x01, 0x03, 0xFF]
+            _writeData(id, motorMode)
+            _servoModes[id] = _SCS_MODE_SERVO
+        if(pos < 0): pos = 0
+        if(speed > 1000): speed = 1000
+        elif(speed < 0): speed = 0
+        posData:byte[7]
+        posData[0] = 0x2A
+        posData[1] = ((pos >> 8) & 0x03)
+        posData[2] = pos & 0xFF
+        posData[3] = 0
+        posData[4] = 0
+        posData[5] = ((speed >> 8) & 0xFF)
+        posData[6] = speed & 0xFF
+        _writeData(id, posData)
+
+    def setAllPositions(pos:int, speed:int):
+        setPosition(SCS_BROADCAST_ID, pos, speed)
+
+    def getPosition(id:byte)->int:
+        _sendReadData(id, 0x38, 0x02)
+        delay(10)
+        res = readUART(8)
+        return 256 * res[5] + res[6]
+
+    def setMotorSpeed(id:byte, speed:int, cw:bool):
+        if(id == SCS_BROADCAST_ID || _servoModes[id] != _SCS_MODE_MOTOR):
+            motorMode = [0x09, 0x00, 0x00, 0x00, 0x00]
+            _writeData(id, motorMode)
+            _servoModes[id] = _SCS_MODE_MOTOR
+        speedL:byte = speed
+        speedH:byte = ((speed >> 8) & 0x03) | (cw << 2)
+        drive:byte[3]
+        drive[0] = 0x2c
+        drive[1] = speedH
+        drive[2] = speedL
+        _writeData(id, drive)
+
+    def setAllMotorSpeeds(speed:int, cw:bool):
+        setMotorSpeed(SCS_BROADCAST_ID, speed, cw)
+
+    def stopServo(id:byte):
+        stopData = [0x28, 0x00]
+        _writeData(id, stopData)
+
+    def stopAllServos():
+        stopServo(SCS_BROADCAST_ID)
+
+    def changeId(oldId:byte, newId:byte):
+        _releaseLock(oldId)
+        idData = [0x05, 0x00]
+        idData[1] = newId
+        _writeData(oldId, idData)
+        delay(20)
+        _setLock(newId)
+
+    def isServoMoving(id:byte)->bool:
+        _sendReadData(id, 0x42, 0x01)
+        delay(10)
+        res = readUART(7)
+        return res[5]
+
+    def getLoad(id:byte)->int:
+        _sendReadData(id, 0x3C, 0x02)
+        delay(10)
+        res = readUART(8)
+        load:int = 256 * res[5] + res[6]
+        if(load & (0x0400) == 0x0400): load = -(load&~(1<<10))
+        return load
+
+    def getSpeed(id:byte)->int:
+        _sendReadData(id, 0x3A, 0x02)
+        delay(10)
+        res = readUART(8)
+        speed:int = 256 * res[5] + res[6]
+        if(speed & (1<<15) == 0x8000): speed = -(speed&~(1<<15))
+        return speed

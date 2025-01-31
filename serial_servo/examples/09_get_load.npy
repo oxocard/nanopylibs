@@ -1,0 +1,24 @@
+import serial_servo
+
+servoBus:SerialServoBus
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+dir = false
+cnt = 0
+while true:
+    # Move the servo left and right
+    if(cnt >= 10 && dir):
+        servoBus.setPosition(1, 1000, 500)
+        dir = false
+        cnt = 0
+    elif(cnt >= 10):
+        servoBus.setPosition(1, 0, 500)
+        dir = true
+        cnt = 0
+    # Show the load on the screen.
+    # See what happens if you stop it a little bit
+    clear()
+    drawTextCentered(120, 120, servoBus.getLoad(1))
+    update()
+    cnt++
+    delay(250)

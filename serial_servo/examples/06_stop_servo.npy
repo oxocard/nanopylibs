@@ -1,0 +1,16 @@
+import serial_servo
+
+servoBus:SerialServoBus
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+# Run the servo in motor mode
+servoBus.setMotorSpeed(1, 200, true)
+delay(2000)
+
+# Stop the servo again 
+servoBus.stopServo(1)
+
+# Note:
+# To stop all servo, you can use
+# the stopAllServos() function
+# servoBus.stopAllServos()

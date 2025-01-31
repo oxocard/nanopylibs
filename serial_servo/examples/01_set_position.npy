@@ -1,0 +1,12 @@
+# Import serial servo lib
+import serial_servo
+
+# Create serial servo bus object
+servoBus:SerialServoBus
+
+# Call init to initialize the UART interface
+#              Tx Pin    Rx Pin   Baudrate
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+# Set the position of the servo with id 1 to 0 with speed 512
+servoBus.setPosition(1, 0, 500)

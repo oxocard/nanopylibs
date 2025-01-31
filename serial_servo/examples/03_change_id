@@ -1,0 +1,27 @@
+# Import serial servo lib
+import serial_servo
+
+# Create serial servo bus object
+servoBus:SerialServoBus
+
+# Call init to initialize the UART interface
+#              Tx Pin    Rx Pin   Baudrate
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+# --------- CAUTION! ----------
+# Make sure only one servo with
+# the ID to change is connected.
+
+# Change the ID of a servo
+# ID:             old   new
+servoBus.changeId(2, 3)
+
+
+# NOTE:
+# If you don't know the ID of a servo,
+# you can change it with a broadcast message
+# ID = SCS_BROADCAST_ID (0xFE)
+#
+# In this case ONLY ONE SERVO must be connected.
+#                   broadcast ID      new ID
+# servoBus.changeId(SCS_BROADCAST_ID, 1)

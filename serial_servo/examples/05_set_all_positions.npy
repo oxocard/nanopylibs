@@ -1,0 +1,9 @@
+import serial_servo
+
+servoBus:SerialServoBus
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+# Set the position for all the servo.
+# In this case there is no need to set an ID
+#                       pos  speed
+servoBus.setAllPositions(800, 500)

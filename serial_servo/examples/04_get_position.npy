@@ -1,0 +1,18 @@
+import serial_servo
+
+servoBus:SerialServoBus
+servoBus.init(C_PIN_01, C_PIN_02, 1000000)
+
+# Set a position for the servo
+# and wait for it to reach it
+servoBus.setPosition(1, 500, 1000)
+delay(2000)
+
+# Get the position of the servo
+#                         ID
+pos = servoBus.getPosition(1)
+
+# Draw the position on the display
+clear()
+drawTextCentered(120, 120, pos)
+update()
