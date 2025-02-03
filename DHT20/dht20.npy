@@ -1,0 +1,54 @@
+const _DHT20_I2C_ADDRESS         = 0x38
+const _DHT20_STATUS_REG_ADDR     = 0x71
+const _DHT20_RESET_REG_ADDR      = 0xBA
+const _DHT20_CONF_REG_ADDR       = 0xE1
+
+class DHT20:
+    _initialized:bool
+
+    def _reset():
+        delay(500)
+        writeI2CByte(_DHT20_I2C_ADDRESS, -1, _DHT20_RESET_REG_ADDR)
+        delay(500);
+
+    def _setSysConfig():
+        configData = [0x08, 0x00]
+        writeI2C(_DHT20_I2C_ADDRESS, _DHT20_CONF_REG_ADDR, 2, configData)
+
+    def _readStatus()->byte:
+        readI2C(_DHT20_I2C_ADDRESS, _DHT20_STATUS_REG_ADDR, 1)
+        status = getI2CByte()
+        if((status & 0x08) == 0x08): return 1
+        else: return 0
+
+    def init()->bool:
+        cnt = 0
+        while(_readStatus() == 0):
+            _reset()
+            _setSysConfig()
+            cnt++
+            if(cnt > 5) return false
+        _initialized = true
+        return true
+
+    def readData()->float[2]:
+        if not _initialized: init()
+        # Send start measurement command
+        sm = [0xAC, 0x33, 0x00]
+        writeI2C(_DHT20_I2C_ADDRESS, -1, 3, sm)
+        delay(100)
+        # Read raw data
+        readI2C(_DHT20_I2C_ADDRESS, -1, 6)
+        state = getI2CByte()
+        h1:long = getI2CByte()
+        h2:long = getI2CByte()
+        ht:long = getI2CByte()
+        t2:long = getI2CByte()
+        t3:long = getI2CByte()
+        rawHumi:long = (h1 << 12) + (h2 << 4) + ((ht & 0xF0) >> 4)
+        rawTemp:long = ((ht & 0x0F) << 16) + (t2 << 8) + t3
+
+        res:float[2]
+        res[1] = toFloat(rawHumi) * 100.0 / 1024 / 1024
+        res[0] = toFloat(rawTemp) * 200.0 / 1024 / 1024 - 50
+        return res

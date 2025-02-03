@@ -1,0 +1,28 @@
+# Import the sensor lib
+import dht20
+
+# Create a sensor object
+sensor:DHT20
+
+# Init the sensor and show an error if
+# the initialization fails
+if(not sensor.init()):
+    clear()
+    drawTextCentered(120, 120, "Init failed")
+    update()
+    while true:
+        delay(1000)
+
+# Show only one decimal point
+setPrecision(1)
+
+# Read the data every second and show them on the screen
+while true:
+    data = sensor.readData()
+
+    clear()
+    drawTextCentered(120, 80, data[0] + " °C")
+    drawTextCentered(120, 160, data[1] + " %RH")
+    update()
+
+    delay(1000)
