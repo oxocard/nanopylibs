@@ -33,12 +33,12 @@ The DHT20 class provides methods to read the temperature and humidity from the s
 
 ### Methods
 
-- `init`: Initializes the UART interface
+- `init`: Initializes the sensor
 - `readData`: Reads the temperature and humidity from the sensor
 
 ### init()
 
-The `init` method initializes the UART interface.  
+The `init` method initializes the sensor.  
 The method returns a boolean value, true if the initialization was successful, false otherwise.
 
 ```python

@@ -1,0 +1,16 @@
+# Import the sensor lib
+import tcs34725
+
+# Create a sensor object
+rgbSensor:TCS34725
+
+# Init the sensor and read the RGB values
+rgbSensor.init()
+c:int[3] = rgbSensor.readRGB()
+
+# Show the values on the screen
+clear()
+drawText(10, 10, "Red = " +c[0])
+drawText(10, 50, "Green = " +c[1])
+drawText(10, 90, "Blue = " +c[2])
+update()

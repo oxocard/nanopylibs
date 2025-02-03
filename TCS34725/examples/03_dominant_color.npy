@@ -1,0 +1,32 @@
+# Import the sensor lib
+import tcs34725
+
+# Create a sensor object and init the sensor
+rgbSensor:TCS34725
+rgbSensor.init()
+
+while true:
+    # Read the RGB values
+    colors:int[3] = rgbSensor.readRGB()
+    red = colors[0]
+    green = colors[1]
+    blue = colors[2]
+
+    textFont(FONT_ROBOTO_64)
+    clear()
+
+    # Determine the dominant color
+    if red > green && red > blue:
+        stroke(255,0,0)
+        drawTextCentered(120, 120, "RED")
+    elif green > red && green > blue:
+        stroke(0,255,0)
+        drawTextCentered(120, 120, "GREEN")
+    elif blue > red && blue > green:
+        stroke(0,0,255)
+        drawTextCentered(120, 120, "BLUE")
+        
+    textFont(FONT_ROBOTO_24)
+    drawText(20, 200, "R" + red + " G" + green + " B" + blue)
+    update()
+    delay(100)

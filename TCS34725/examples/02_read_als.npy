@@ -1,0 +1,14 @@
+# Import the sensor lib
+import tcs34725
+
+# Create a sensor object
+rgbSensor:TCS34725
+
+# Init the sensor and read the ALS value
+rgbSensor.init()
+als = rgbSensor.readALS()
+
+# Show the value on the screen
+clear()
+drawTextCentered(120, 120, "ALS = " + als)
+update()
