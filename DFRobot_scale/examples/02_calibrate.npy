@@ -1,0 +1,32 @@
+# Import the weight sensor lib
+import weight_sensor
+
+# Define the reference weight for the calibration
+const REF_WEIGHT = 100 # 50..1000
+
+# Create a weight sensor object and initialize it
+myScale:WeightSensor
+myScale.init()
+
+# Inform the user to put the reference weight on the scale
+clear()
+drawTextCentered(120, 40, "Calibration")
+drawTextCentered(120, 120, "Please put")
+drawTextCentered(120, 160, REF_WEIGHT + "g")
+drawTextCentered(120, 200, "on the scale")
+update()
+
+# Start the calibration
+res = myScale.calibrate(REF_WEIGHT)
+
+# Show if the calibration was successful or not
+clear()
+drawTextCentered(120, 40, "Calibration")
+if(res):
+    stroke(0, 255, 0)
+    drawTextCentered(120, 120, "SUCCESSFUL")
+else:
+    stroke(255, 0, 0)
+    drawTextCentered(120, 120, "FAILED")
+update()
+

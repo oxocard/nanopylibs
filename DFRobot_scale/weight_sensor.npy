@@ -1,0 +1,117 @@
+const _WEIGHT_SENSOR_I2C_ADDR                 = 0x64  # I2C Address
+
+const _WEIGHT_SENSOR_CLEAR_REG_STATE          = 0x65     # Clear state
+const _WEIGHT_SENSOR_DATA_GET_RAM_DATA        = 0x66     # Get sensor raw data
+const _WEIGHT_SENSOR_DATA_GET_CALIBRATION     = 0x67     # Gets the automatic calibration value
+const _WEIGHT_SENSOR_DATA_GET_PEEL_FLAG       = 0x69     # Obtain peeling position
+const _WEIGHT_SENSOR_DATA_INIT_SENSOR         = 0x70     # Module initialization
+const _WEIGHT_SENSOR_SET_CAL_THRESHOLD        = 0x71     # Set the calibration trigger threshold
+const _WEIGHT_SENSOR_SET_TRIGGER_WEIGHT       = 0x72     # Set calibration weight
+  
+const _WEIGHT_SENSOR_CLICK_RST                = 0x73     # Simulation of RST
+const _WEIGHT_SENSOR_CLICK_CAL                = 0x74     # Simulation of CAL
+
+# Class for casting 4 bytes into a float
+# by serializing the data array.
+# used to get the calibration value int _getCal()
+class FloatCastHelper
+    f:float
+
+class WeightSensor:
+    _initialized:bool
+    _offset:long
+    _calibration:float
+
+    def _getValue()->long:
+        value:long = 0
+        data:long[4]
+        writeI2CByte(_WEIGHT_SENSOR_I2C_ADDR, -1, _WEIGHT_SENSOR_DATA_GET_RAM_DATA)
+        delay(30)
+        readI2C(_WEIGHT_SENSOR_I2C_ADDR, -1, 4)
+        data[0] = getI2CByte()
+        data[1] = getI2CByte()
+        data[2] = getI2CByte()
+        data[3] = getI2CByte()
+
+        if(data[0] == 0x12):
+            value = data[1];
+            value = ((value << 8) | data[2]);
+            value = ((value << 8) | data[3]);
+
+        return (value^0x800000)
+
+    def _average()->long:
+        sum:long = 0
+        for i in 10:
+            sum += _getValue()
+        return sum / 10
+
+
+    def _getCal()->float:
+        value:long = 0
+        data:byte[4]
+        readI2C(_WEIGHT_SENSOR_I2C_ADDR, _WEIGHT_SENSOR_DATA_GET_CALIBRATION, 4)
+        data[3] = getI2CByte()
+        data[2] = getI2CByte()
+        data[1] = getI2CByte()
+        data[0] = getI2CByte()
+
+        # Cast bytes to float
+        castFloat:FloatCastHelper
+        castFloat << data
+
+        return castFloat.f
+
+    def _getPeelFlag()->byte:
+        flag = readI2CByte(_WEIGHT_SENSOR_I2C_ADDR, _WEIGHT_SENSOR_DATA_GET_PEEL_FLAG)
+        if(flag == 0x01 || flag == 129): return 1
+        elif(flag == 0x02): return 2
+        else: return 0
+
+    def init():
+        writeI2CByte(_WEIGHT_SENSOR_I2C_ADDR, _WEIGHT_SENSOR_DATA_INIT_SENSOR, _WEIGHT_SENSOR_CLEAR_REG_STATE)
+        delay(100)
+        _offset = _average()
+        _calibration = _getCal()
+        _initialized = true
+
+    def getWeight()->int:
+        if not _initialized: init()
+        value:long = _average()
+        flag:byte = _getPeelFlag()
+        if(flag == 1):
+            _offset = _average()
+        elif(flag == 2):
+            _calibration = _getCal()
+        weightFloat:float = (toFloat(value) - _offset) / _calibration
+        return round(weightFloat)
+
+    def tare():
+        if not _initialized: init()
+        _offset = _average()
+        writeI2CByte(_WEIGHT_SENSOR_I2C_ADDR, -1, _WEIGHT_SENSOR_CLICK_RST)
+
+    def calibrate(ref:int)->bool:
+        if not _initialized: init()
+        if(ref < 50 || ref > 1000): return false
+        refWeight:byte[2]
+        refWeight[0] = ref >> 8
+        refWeight[1] = ref & 0xFF
+        writeI2C(_WEIGHT_SENSOR_I2C_ADDR, _WEIGHT_SENSOR_SET_TRIGGER_WEIGHT, 2, refWeight)
+        delay(100)
+        thresWeight:byte[2]
+        thresWeight[0] = 0x00
+        thresWeight[1] = 30
+        writeI2C(_WEIGHT_SENSOR_I2C_ADDR, _WEIGHT_SENSOR_SET_CAL_THRESHOLD, 2, thresWeight)
+        delay(100)
+        writeI2CByte(_WEIGHT_SENSOR_I2C_ADDR, -1, _WEIGHT_SENSOR_CLICK_CAL)
+
+        for cnt in 20:
+            delay(500)
+            flag = _getPeelFlag()
+            if(flag == 0x02):
+                delay(100)
+                _calibration = _getCal()
+                return true
+
+        return false

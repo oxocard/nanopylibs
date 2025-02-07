@@ -1,0 +1,16 @@
+# Import the weight sensor lib
+import weight_sensor
+
+# Create a weight sensor object
+myScale:WeightSensor
+
+# Init the myScale object
+myScale.init()
+
+# Show the weight on the screen
+textFont(FONT_ROBOTO_48)
+while true:
+    delay(100)
+    clear()
+    drawTextCentered(120, 120, myScale.getWeight() + "g")
+    update()

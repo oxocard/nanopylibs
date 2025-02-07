@@ -1,0 +1,28 @@
+# Import the weight sensor lib
+import weight_sensor
+
+# Define the reference weight for the calibration
+const REF_WEIGHT = 100 # 50..1000
+
+# Create a weight sensor object and initialize it
+myScale:WeightSensor
+myScale.init()
+
+# Show the weight on the screen
+textFont(FONT_ROBOTO_48)
+while true:
+    delay(100)
+    clear()
+    drawTextCentered(120, 120, myScale.getWeight() + "g")
+    update()
+
+    # Set the scale to zero
+    # if the middle button is pressed
+    b:buttons = getButtons()
+    if b.middle:
+        clear()
+        drawTextCentered(120, 120, "TARE")
+        update()
+        # Call the tare function
+        myScale.tare()
+        delay(500) 

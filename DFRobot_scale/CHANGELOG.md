@@ -2,12 +2,12 @@
 
 ## Library Changes
 
-### 03.02.2025
+### 07.02.2025
 
 - Initial release
 
 ## Example Changes
 
-### 03.02.2025
+### 07.02.2025
 
-- Initial release Example 01
+- Initial release Examples 01 to 03
