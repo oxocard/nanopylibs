@@ -28,6 +28,13 @@ while true:
 
 To see a more examples, check the examples folder.
 
+## Calibration
+
+For the sensor to be able to read the weight correctly, it needs to be calibrated with a reference weight.  
+The PCB from the Kit has a calibration button that can be used to calibrate the sensor with a 100g reference weight.
+
+Alternatively, you can use the `calibrate` method from the library to calibrate the sensor.
+
 ## Description
 
 The WeightSensor class provides methods to read, calibrate or zero the weight.
