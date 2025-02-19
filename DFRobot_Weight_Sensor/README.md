@@ -64,7 +64,7 @@ myScale:WeightSensor
 weight:int = myScale.getWeight()
 ```
 
-### readALS()
+### tare()
 
 The `tare` method tares (set to zero) the weight sensor.
 

@@ -1,0 +1,41 @@
+class HX711:
+    _sckPin:byte
+    _dtPin:byte
+    _offset:long
+    _correction:float
+    _lastValue:long
+
+    def _readRaw()->long:
+        data:long = 0
+        while readGPIO(_dtPin):
+            delay(10)
+        for n in 25:
+            writeGPIO(_sckPin, 1)
+            if readGPIO(_dtPin):
+                data = data + (1 << (24-n))
+            writeGPIO(_sckPin, 0)
+        return data
+
+    def init(sckPin:byte, dtPin:byte):
+        _sckPin = sckPin
+        _dtPin = dtPin
+        _offset = 0
+        _correction = 795.652
+        _lastValue = 0
+        initGPIO(_sckPin, OUTPUT)  
+        initGPIO(_dtPin, INPUT)
+        writeGPIO(_sckPin, 0)
+
+    def getWeight()->long:
+        data:long = toFloat(_readRaw() - _offset) / _correction
+        if abs(data - _lastValue) > 50:
+            data = toFloat(_readRaw() - _offset) / _correction
+        _lastValue = data
+        return data
+
+    def tare():
+        _offset = _readRaw()
+
+    def calibrate(ref:float):
+        value = getWeight()
+        _correction = _correction * (value / ref)

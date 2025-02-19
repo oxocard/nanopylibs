@@ -1,9 +1,10 @@
-# Import the weight sensor lib
-import weight_sensor
+# Import the HX711 lib
+import hx711
 
-# Create a weight sensor object and initialize it
-myScale:WeightSensor
-myScale.init()
+# Create a weight sensor object, initialize and zero it
+myScale:HX711
+myScale.init(C_PIN_01, C_PIN_02)
+myScale.tare()
 
 # Show the weight on the screen
 textFont(FONT_ROBOTO_48)

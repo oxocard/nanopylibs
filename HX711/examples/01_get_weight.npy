@@ -1,0 +1,19 @@
+# Import the HX711 lib
+import hx711
+
+# Create a scale object
+myScale:HX711
+
+# Init the myScale object
+myScale.init(C_PIN_01, C_PIN_02)
+
+# Tare the scale after initialisation
+myScale.tare()
+
+# Show the weight on the screen
+textFont(FONT_ROBOTO_48)
+while true:
+    delay(100)
+    clear()
+    drawTextCentered(120, 120, myScale.getWeight() + "g")
+    update()

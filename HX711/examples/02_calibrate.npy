@@ -1,0 +1,32 @@
+# Import the HX711 lib
+import hx711
+
+# Define the reference weight for the calibration
+const REF_WEIGHT = 1000 # 100..5000
+
+# Create a weight sensor object, initialize and zero it
+myScale:HX711
+myScale.init(C_PIN_01, C_PIN_02)
+myScale.tare()
+
+# Inform the user to put the reference weight on the scale
+clear()
+drawTextCentered(120, 30, "Please put")
+drawTextCentered(120, 75, REF_WEIGHT + "g")
+drawTextCentered(120, 120, "on the scale")
+drawTextCentered(120, 180, "and press")
+drawTextCentered(120, 220, "a button")
+update()
+
+# Wait for button press
+while getButton() == 0:
+    delay(100)
+
+# Calibrate the scale
+myScale.calibrate(REF_WEIGHT)
+
+# Show calibration done
+clear()
+drawTextCentered(120, 40, "Calibration")
+drawTextCentered(120, 120, "DONE")
+update()

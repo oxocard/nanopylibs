@@ -10,4 +10,4 @@
 
 ### 31.01.2025
 
-- Initial release Examples 01..09
+- Initial release examples 01..09

@@ -10,4 +10,8 @@
 
 ### 07.02.2025
 
-- Initial release Examples 01 to 03
+- Initial release examples 01 to 03
+
+### 19.02.2025
+
+- Removed unused REF_WEIGHT constant from example 03
