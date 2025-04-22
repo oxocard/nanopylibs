@@ -19,16 +19,42 @@ class TCS34725:
         delay(100)
         _initialized = true
 
-    def readRGB()->int[]:
+    def readRGBCRaw()->int[]:
         if not _initialized: init()
         r = readI2CInt(_TCS34725_ADDRESS, _TCS34725_RDATAL)
         g = readI2CInt(_TCS34725_ADDRESS, _TCS34725_GDATAL)
         b = readI2CInt(_TCS34725_ADDRESS, _TCS34725_BDATAL)
-        c:int[3]
-        c[0] = r
-        c[1] = g
-        c[2] = b
-        return c
+        c = readI2CInt(_TCS34725_ADDRESS, _TCS34725_CDATAL)
+        ret:int[4]
+        ret[0] = r
+        ret[1] = g
+        ret[2] = b
+        ret[3] = c
+        return ret
+
+    def readRGB()->byte[]:
+        rgbraw:int[4] = readRGBCRaw()
+
+        r_ratio:float   = rgbraw[0]
+        g_ratio:float   = rgbraw[1]
+        b_ratio:float   = rgbraw[2]
+        
+        if rgbraw[3] != 0
+            r_ratio = r_ratio  / rgbraw[3]
+            g_ratio = g_ratio  / rgbraw[3]
+            b_ratio = b_ratio  / rgbraw[3]
+        
+        # Scale the ratios to the 0-255 range
+        r_scaled:float   = r_ratio   * 255.0
+        g_scaled:float   = g_ratio   * 255.0
+        b_scaled:float   = b_ratio   * 255.0
+
+        # Clamp the values to ensure they are within the 0-255 range
+        ret:byte[3]
+        ret[0] = bounds(r_scaled,0,255)
+        ret[1] = bounds(g_scaled,0,255)
+        ret[2] = bounds(b_scaled,0,255)
+        return ret        
 
     def readALS()->int:
         if not _initialized: init()
