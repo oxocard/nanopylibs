@@ -1,10 +1,11 @@
 const _TCS34725_ADDRESS          = 0x29  # Address of the Sensor
 
-const _TCS34725_ENABLE           = 0x80  # Enable register
-const _TCS34725_CDATAL           = 0x94  # Clear channel register
-const _TCS34725_RDATAL           = 0x96  # Red channel register
-const _TCS34725_GDATAL           = 0x98  # Green channel register
-const _TCS34725_BDATAL           = 0x9A  # Blue channel register
+const _TCS34725_ENABLE           = 0x00  # Enable register
+const _TCS34725_COMMAND_BIT      = 0x80
+const _TCS34725_CDATAL           = 0x14  # Clear channel register
+const _TCS34725_RDATAL           = 0x16  # Red channel register
+const _TCS34725_GDATAL           = 0x18  # Green channel register
+const _TCS34725_BDATAL           = 0x1A  # Blue channel register
 
 const _TCS34725_ENABLE_AEN       = 0x02  # RGBC Enable - Writing 1 actives the ADC, 0 disables it
 const _TCS34725_ENABLE_PON       = 0x01  # Power on - Writing 1 activates the internal oscillator, 0 disables it
@@ -13,18 +14,16 @@ class TCS34725:
     _initialized:bool
 
     def init():
-        writeI2CByte(_TCS34725_ADDRESS, _TCS34725_ENABLE, _TCS34725_ENABLE_PON)
-        delay(5)
-        writeI2CByte(_TCS34725_ADDRESS, _TCS34725_ENABLE, _TCS34725_ENABLE_AEN | _TCS34725_ENABLE_PON)
+        writeI2CByte(_TCS34725_ADDRESS, _TCS34725_ENABLE | _TCS34725_COMMAND_BIT, _TCS34725_ENABLE_AEN | _TCS34725_ENABLE_PON)
         delay(100)
         _initialized = true
 
     def readRGBCRaw()->int[]:
         if not _initialized: init()
-        r = readI2CInt(_TCS34725_ADDRESS, _TCS34725_RDATAL)
-        g = readI2CInt(_TCS34725_ADDRESS, _TCS34725_GDATAL)
-        b = readI2CInt(_TCS34725_ADDRESS, _TCS34725_BDATAL)
-        c = readI2CInt(_TCS34725_ADDRESS, _TCS34725_CDATAL)
+        r = readI2CInt(_TCS34725_ADDRESS, _TCS34725_RDATAL | _TCS34725_COMMAND_BIT)
+        g = readI2CInt(_TCS34725_ADDRESS, _TCS34725_GDATAL | _TCS34725_COMMAND_BIT)
+        b = readI2CInt(_TCS34725_ADDRESS, _TCS34725_BDATAL | _TCS34725_COMMAND_BIT)
+        c = readI2CInt(_TCS34725_ADDRESS, _TCS34725_CDATAL | _TCS34725_COMMAND_BIT)
         ret:int[4]
         ret[0] = r
         ret[1] = g
@@ -58,5 +57,5 @@ class TCS34725:
 
     def readALS()->int:
         if not _initialized: init()
-        als = readI2CInt(_TCS34725_ADDRESS, _TCS34725_CDATAL)
+        als = readI2CInt(_TCS34725_ADDRESS, _TCS34725_CDATAL | _TCS34725_COMMAND_BIT)
         return als
